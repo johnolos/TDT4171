@@ -50,8 +50,20 @@ public class Node {
 		return this.children;
 	}
 	public boolean classify(ArrayList<Integer> transaction) {
-		
-		return false;
+		if(this.children.isEmpty()){
+			if(transaction.get(7)==this.importance){
+				return true;
+			}
+			return false;
+		}
+		else{
+				if(this.children.get(0).branch == transaction.get(importance)){
+					return this.children.get(0).classify(transaction);
+				}
+				else{
+					return this.children.get(1).classify(transaction);
+				}
+		}
 	}
 
 }

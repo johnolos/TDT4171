@@ -28,12 +28,12 @@ public class DecisionThree {
 		if(random)
 			best = attributes.get(rand.nextInt(attributes.size()));
 		else
-			best = 0;
+			best = Importance(examples, attributes);
 		ArrayList<Integer> copy = new ArrayList<Integer>();
 		for (Integer i : attributes) {
 			if(i != best)
 				copy.add(new Integer(i));
-		}
+		} 
 		Node tree = new Node(best);
 		for(int vk = 1; vk <= 2; vk++) {
 			ArrayList<ArrayList<Integer>> exs = new ArrayList<ArrayList<Integer>>();
@@ -98,9 +98,28 @@ public class DecisionThree {
 		return examples.get(0).get(numberOfEntries - 1);
 	}
 	
-	public int Importance(int a, ArrayList<ArrayList<Integer>> examples) {
+	public int Importance(ArrayList<ArrayList<Integer>> examples, ArrayList<Integer> attributes) {
 		// Shall calculate information gain pr. attribute and return index of attribute with best gain.
+		
+		
+		
 		return 0;
+	}
+	
+	public double B(double q) {
+		return -(q*(Math.log(q)/Math.log(2)) + (1-q)*(Math.log(1-q)/Math.log(2)));
+	}
+	
+	public double remainder(ArrayList<ArrayList<Integer>> examples, int attr) {
+		double pk = 0, nk = 0, p = 0, n = 0;
+		for(int i = 0; i < examples.size(); i++) {
+			if(examples.get(i).get(attr) == 1) {
+				 ++pk;
+			} else {
+				++nk;
+			}
+		}
+		
 	}
 	
 	
@@ -132,13 +151,14 @@ public class DecisionThree {
 			
 			
 			ArrayList<ArrayList<Integer>> validation = TestData.ReadTestData("files/test.txt");
-			int count =0;
+			int count = 0;
 			for (ArrayList<Integer> transaction : validation) {
 				if(node.classify(transaction)){
 					count++;
 				}
 			}
-			System.out.println("Percentage: " + count/validation.size());
+			System.out.println(count);
+			System.out.println("Percentage: " + (double) count/validation.size());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
