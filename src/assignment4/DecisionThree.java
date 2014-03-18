@@ -114,9 +114,18 @@ public class DecisionThree {
 		double pk = 0, nk = 0, p = 0, n = 0;
 		for(int i = 0; i < examples.size(); i++) {
 			if(examples.get(i).get(attr) == 1) {
-				 ++pk;
-			} else {
-				++nk;
+				if(examples.get(i).get(7) == 1) {
+					++pk;
+				} else {
+					++nk;
+				}
+			}
+			if(examples.get(i).get(attr) == 2) {
+				if(examples.get(i).get(7) == 1) {
+					++pk;
+				} else {
+					++nk;
+				}
 			}
 		}
 		
