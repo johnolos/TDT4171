@@ -100,6 +100,7 @@ public class DecisionThree {
 	}
 	
 	public int Importance(ArrayList<ArrayList<Integer>> examples, ArrayList<Integer> attributes) {
+		int numberOfAttributes = examples.size();
 		// Shall calculate information gain pr. attribute and return index of attribute with best gain.
 		
 		
