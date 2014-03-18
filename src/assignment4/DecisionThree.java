@@ -1,17 +1,18 @@
 package assignment4;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
 public class DecisionThree {
+
+	Random rand;
+	boolean random;
 	
-	
-	Random random;
-	
-	
-	public DecisionThree() {
-		random = new Random();
+	public DecisionThree(boolean random) {
+		rand = new Random();
+		this.random = random;
 	}
 	
 	
@@ -19,13 +20,40 @@ public class DecisionThree {
 	public Node DecisionThreeLearning(ArrayList<ArrayList<Integer>> examples, ArrayList<Integer> attributes, ArrayList<ArrayList<Integer>> parent_examples) {
 		if(examples.isEmpty())
 			return new Node(PluralityValue(parent_examples));
-		if(SameClassification(examples))
+		else if(SameClassification(examples))
 			return new Node(getSameClassification(examples));
-		if(attributes.isEmpty())
+		else if(attributes.isEmpty())
 			return new Node(PluralityValue(examples));
-		return null;
+		int best;
+		if(random)
+			best = attributes.get(rand.nextInt(attributes.size()));
+		else
+			best = 0;
+		ArrayList<Integer> copy = new ArrayList<Integer>();
+		for (Integer i : attributes) {
+			if(i != best)
+				copy.add(new Integer(i));
+		}
+		Node tree = new Node(best);
+		for(int vk = 1; vk <= 2; vk++) {
+			ArrayList<ArrayList<Integer>> exs = new ArrayList<ArrayList<Integer>>();
+			for(int i = 0; i < examples.size(); i++) {
+				if(examples.get(i).get(best) == vk) {
+					exs.add(examples.get(i));
+				}
+			}
+			Node subtree = DecisionThreeLearning(exs, copy, examples);
+			tree.setBranch(vk);
+			tree.addChild(subtree);
+			
+		}
+		
+		
+		
+		
+		return tree;
 	}
-
+	
 	/**
 	 * Returns int value of the most frequently classification.
 	 * Classification is interpreted as last entry in the inner list.
@@ -45,7 +73,7 @@ public class DecisionThree {
 		}
 		// Returns randomly between 1 or 2 if the number of classification is same.
 		if(a == b)
-			return (random.nextInt(2) + 1); // Returns 1 or 2.
+			return (rand.nextInt(2) + 1); // Returns 1 or 2.
 		return (a > b ? 1 : 2);
 	}
 	
@@ -96,12 +124,36 @@ public class DecisionThree {
 	
 	public static void main(String[] args) {
 		try {
-			DecisionThree decisionThree = new DecisionThree();
-			ArrayList<ArrayList<Integer>> examples = TestData.ReadTestData("files/myFile.txt");
-			System.out.println(decisionThree.PluralityValue(examples));
+			DecisionThree decisionThree = new DecisionThree(true);
+			ArrayList<ArrayList<Integer>> examples = TestData.ReadTestData("files/training.txt");
+			ArrayList<Integer> attributes = getAttributes(examples);
+			Node node = decisionThree.DecisionThreeLearning(examples, attributes, null);
+			node.printTree(0);
+			
+			
+			ArrayList<ArrayList<Integer>> validation = TestData.ReadTestData("files/test.txt");
+			int count =0;
+			for (ArrayList<Integer> transaction : validation) {
+				if(node.classify(transaction)){
+					count++;
+				}
+			}
+			System.out.println("Percentage: " + count/validation.size());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
+	}
+
+
+
+	private static ArrayList<Integer> getAttributes(
+			ArrayList<ArrayList<Integer>> examples) {
+		ArrayList<Integer> attr = new ArrayList<Integer>();
+		for(int i = 0; i < examples.get(0).size() - 1; i++) {
+			attr.add(i);
+		}
+		return attr;
 	}
 
 }
