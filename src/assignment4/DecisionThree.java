@@ -2,6 +2,7 @@ package assignment4;
 
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -93,7 +94,7 @@ public class DecisionThree {
 	}
 	
 	
-	private int getSameClassification(ArrayList<ArrayList<Integer>> examples) {
+	public int getSameClassification(ArrayList<ArrayList<Integer>> examples) {
 		int numberOfEntries = examples.get(0).size();
 		return examples.get(0).get(numberOfEntries - 1);
 	}
@@ -110,45 +111,46 @@ public class DecisionThree {
 		return -(q*(Math.log(q)/Math.log(2)) + (1-q)*(Math.log(1-q)/Math.log(2)));
 	}
 	
-	public double remainder(ArrayList<ArrayList<Integer>> examples, int attr) {
+	private double remainderSum(ArrayList<ArrayList<Integer>> examples, int attr, int d) {
 		double pk = 0, nk = 0, p = 0, n = 0;
-		for(int i = 0; i < examples.size(); i++) {
-			if(examples.get(i).get(attr) == 1) {
-				if(examples.get(i).get(7) == 1) {
-					++pk;
-				} else {
-					++nk;
-				}
-			}
-			if(examples.get(i).get(attr) == 2) {
-				if(examples.get(i).get(7) == 1) {
-					++pk;
-				} else {
-					++nk;
-				}
+		for(ArrayList<Integer> example : examples) {
+			if(example.get(7) == 1) {
+				p++;
+				if(example.get(attr) == d)
+					pk++;
+			} else {
+				n++;
+				if(example.get(attr) == d)
+					nk++;
 			}
 		}
-		
+		return ((pk + nk)/(p + n))*B(pk/(pk+nk));
 	}
 	
+	public double Remainder(ArrayList<ArrayList<Integer>> examples, int attr) {
+		return remainderSum(examples, attr, 1) + remainderSum(examples, attr, 2);
+	}
 	
+	public double Gain(ArrayList<ArrayList<Integer>> examples, int attr) {
+		double p = 0, n = 0;
+		for(ArrayList<Integer> example : examples) {
+			if(example.get(7) == 1)
+				++p;
+			else
+				++n;
+		}
+		return B(p/(p+n)) - Remainder(examples, attr);
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	private static ArrayList<Integer> getAttributes(
+			ArrayList<ArrayList<Integer>> examples) {
+		ArrayList<Integer> attr = new ArrayList<Integer>();
+		for(int i = 0; i < examples.get(0).size() - 1; i++) {
+			attr.add(i);
+		}
+		return attr;
+	}
+
 	
 	public static void main(String[] args) {
 		try {
@@ -166,23 +168,12 @@ public class DecisionThree {
 					count++;
 				}
 			}
+			DecimalFormat numberFormat = new DecimalFormat("#.00");
 			System.out.println(count);
-			System.out.println("Percentage: " + (double) count/validation.size());
+			System.out.println("Percentage: " + numberFormat.format(((double) count/validation.size())* 100) + "%");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
 	}
-
-
-
-	private static ArrayList<Integer> getAttributes(
-			ArrayList<ArrayList<Integer>> examples) {
-		ArrayList<Integer> attr = new ArrayList<Integer>();
-		for(int i = 0; i < examples.get(0).size() - 1; i++) {
-			attr.add(i);
-		}
-		return attr;
-	}
-
 }
