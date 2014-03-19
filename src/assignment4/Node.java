@@ -57,13 +57,23 @@ public class Node {
 			return false;
 		}
 		else{
-				if(this.children.get(0).branch == transaction.get(importance)){
-					return this.children.get(0).classify(transaction);
+			System.out.println(this.children.get(0).branch);
+			System.out.println(this.children.get(1).branch);
+			if(transaction.get(importance) == 1) {
+				for(Node node : this.children) {
+					if(node.branch == 1) {
+						return node.classify(transaction);
+					}
 				}
-				else{
-					return this.children.get(1).classify(transaction);
+			} else {
+				for(Node node : this.children) {
+					if(node.branch == 2) {
+						return node.classify(transaction);
+					}
 				}
+			}
 		}
+		return false;
 	}
 
 }
