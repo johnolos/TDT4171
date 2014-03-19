@@ -1,0 +1,19 @@
+|Internal: 0
+|_ Leaf: 1
+|_ Internal: 1
+|_ _ Internal: 6
+|_ _ _ Internal: 2
+|_ _ _ _ Leaf: 1
+|_ _ _ _ Leaf: 2
+|_ _ _ Internal: 2
+|_ _ _ _ Leaf: 1
+|_ _ _ _ Leaf: 2
+|_ _ Internal: 3
+|_ _ _ Internal: 2
+|_ _ _ _ Leaf: 2
+|_ _ _ _ Leaf: 1
+|_ _ _ Internal: 2
+|_ _ _ _ Leaf: 2
+|_ _ _ _ Leaf: 1
+28
+Percentage: 100.00%
