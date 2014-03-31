@@ -57,8 +57,6 @@ public class Node {
 			return false;
 		}
 		else{
-			System.out.println(this.children.get(0).branch);
-			System.out.println(this.children.get(1).branch);
 			if(transaction.get(importance) == 1) {
 				for(Node node : this.children) {
 					if(node.branch == 1) {

@@ -60,14 +60,24 @@ def runRanker(trainingset, testset):
     for qid in dhTraining.dataset.keys():
         #This iterates through every query ID in our training set
         dataInstance=dhTraining.dataset[qid] #All data instances (query, features, rating) for query qid
-        #TODO: Store the training instances into the trainingPatterns array. Remember to store them as pairs, where the first item is rated higher than the second.
-        #TODO: Hint: A good first step to get the pair ordering right, is to sort the instances based on their rating for this query. (sort by x.rating for each x in dataInstance)
+
+        for i in range(len(dataInstance)):
+            for j in range(i+1, len(dataInstance)):
+                if(dataInstance[i].rating > dataInstance[j].rating):
+                    trainingPatterns.append((dataInstance[i],dataInstance[j]))
+                elif(dataInstance[i].rating < dataInstance[j].rating):
+                    trainingPatterns.append((dataInstance[j],dataInstance[i]))
 
     for qid in dhTesting.dataset.keys():
         #This iterates through every query ID in our test set
         dataInstance=dhTesting.dataset[qid]
-        #TODO: Store the test instances into the testPatterns array, once again as pairs.
-        #TODO: Hint: The testing will be easier for you if you also now order the pairs - it will make it easy to see if the ANN agrees with your ordering.
+        for i in range(len(dataInstance)):
+            for j in range(i+1, len(dataInstance)):
+                if(dataInstance[i].rating > dataInstance[j].rating):
+                    testPatterns.append((dataInstance[i],dataInstance[j]))
+                elif(dataInstance[i].rating < dataInstance[j].rating):
+                    testPatterns.append((dataInstance[j],dataInstance[i]))
+
 
     #Check ANN performance before training
     nn.countMisorderedPairs(testPatterns)
@@ -79,7 +89,5 @@ def runRanker(trainingset, testset):
         nn.countMisorderedPairs(testPatterns)
 
     #TODO: Store the data returned by countMisorderedPairs and plot it, showing how training and testing errors develop.
-
-
 
 runRanker("train.txt","test.txt")
