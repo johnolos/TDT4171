@@ -1,0 +1,34 @@
+Percentage: 92.86%
+|Internal: 0
+|_ Leaf: 1
+|_ Internal: 4
+|_ _ Internal: 2
+|_ _ _ Internal: 1
+|_ _ _ _ Leaf: 1
+|_ _ _ _ Leaf: 2
+|_ _ _ Internal: 1
+|_ _ _ _ Leaf: 2
+|_ _ _ _ Leaf: 1
+|_ _ Internal: 5
+|_ _ _ Internal: 1
+|_ _ _ _ Internal: 2
+|_ _ _ _ _ Leaf: 1
+|_ _ _ _ _ Leaf: 2
+|_ _ _ _ Internal: 2
+|_ _ _ _ _ Leaf: 2
+|_ _ _ _ _ Leaf: 1
+|_ _ _ Internal: 3
+|_ _ _ _ Internal: 1
+|_ _ _ _ _ Internal: 2
+|_ _ _ _ _ _ Leaf: 1
+|_ _ _ _ _ _ Leaf: 2
+|_ _ _ _ _ Internal: 2
+|_ _ _ _ _ _ Leaf: 2
+|_ _ _ _ _ _ Leaf: 1
+|_ _ _ _ Internal: 1
+|_ _ _ _ _ Leaf: 2
+|_ _ _ _ _ Internal: 2
+|_ _ _ _ _ _ Leaf: 2
+|_ _ _ _ _ _ Leaf: 1
+26
+Percentage: 92.86%

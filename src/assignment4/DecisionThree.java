@@ -44,14 +44,10 @@ public class DecisionThree {
 				}
 			}
 			Node subtree = DecisionThreeLearning(exs, copy, examples);
-			tree.setBranch(vk);
+			subtree.setBranch(vk);
+			System.out.println(vk);
 			tree.addChild(subtree);
-			
 		}
-		
-		
-		
-		
 		return tree;
 	}
 	
@@ -100,16 +96,24 @@ public class DecisionThree {
 	}
 	
 	public int Importance(ArrayList<ArrayList<Integer>> examples, ArrayList<Integer> attributes) {
-		int numberOfAttributes = examples.size();
-		// Shall calculate information gain pr. attribute and return index of attribute with best gain.
-		
-		
-		
-		return 0;
+		int numberOfAttributes = examples.get(0).size() - 1;
+		int attrWithBestGain = 0;
+		double bestGain = Gain(examples, attrWithBestGain);
+		double currentGain = 0.0;
+		for(int i = 1; i < numberOfAttributes; i++) {
+			currentGain = Gain(examples, i);
+			if(currentGain > bestGain) {
+				bestGain = currentGain;
+				attrWithBestGain = i;
+			}
+		}
+		return attrWithBestGain;
 	}
 	
 	public double B(double q) {
-		return -(q*(Math.log(q)/Math.log(2)) + (1-q)*(Math.log(1-q)/Math.log(2)));
+		double value = -(q*(Math.log(q)/Math.log(2)) + (1-q)*(Math.log(1-q)/Math.log(2)));
+		
+		return (Double.isNaN(value) ? 0 : value);
 	}
 	
 	private double remainderSum(ArrayList<ArrayList<Integer>> examples, int attr, int d) {
@@ -140,6 +144,8 @@ public class DecisionThree {
 			else
 				++n;
 		}
+////		System.out.println("B: " +  B(p/(p+n)));
+//		System.out.println("Remaineder: " + Remainder(examples, attr));
 		return B(p/(p+n)) - Remainder(examples, attr);
 	}
 	
@@ -169,8 +175,11 @@ public class DecisionThree {
 					count++;
 				}
 			}
+			
+			
 			DecimalFormat numberFormat = new DecimalFormat("#.00");
 			System.out.println(count);
+			System.out.println((double) count/validation.size());
 			System.out.println("Percentage: " + numberFormat.format(((double) count/validation.size())* 100) + "%");
 			
 		} catch (IOException e) {
