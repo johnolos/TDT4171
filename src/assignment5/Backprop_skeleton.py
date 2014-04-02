@@ -89,19 +89,23 @@ class NN: #Neural Network
         probability = logFunc(deltaCalculation)
         self.prevDeltaOutput = logFuncDerivative(self.prevOutputActivation) * (1 - probability)
         self.deltaOutput = logFuncDerivative(self.outputActivation) * (1 - probability)
+        pass
 
 
     def computeHiddenDelta(self):
         for h in range(0,self.numHidden):
-            self.prevDeltaHidden[h] = logFuncDerivative(self.prevOutputActivation)*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
-            self.deltaHidden[h] = logFuncDerivative(self.outputActivation)*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
+            self.prevDeltaHidden = logFuncDerivative(self.prevHiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
+            self.deltaHidden = logFuncDerivative(self.hiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
+        pass
 
 
     def updateWeights(self):
-        for i in range(self.numInputs):
-            for j in range(self.numHidden):
-                diff = (self.prevDeltaOutput * self.prevOutputActivation - self.deltaOutput * self.outputActivation)
-                self.weightsInput[i][j] = self.weightsInput[i][j] + self.learningRate * diff
+        for i in range(0,self.numInputs):
+            for j in range(0,self.numHidden):
+                self.weightsInput[i][j] = self.weightsInput[i][j] + self.learningRate*(self.prevDeltaHidden[j] * self.prevHiddenActivations[j] - self.deltaHidden[j] * self.hiddenActivations[j])
+        for x in range(len(self.weightsOutput)):
+            self.weightsOutput[i] += self.learningRate*(self.prevDeltaOutput*self.prevHiddenActivations[i] - self.deltaOutput*self.hiddenActivations[i])
+        pass
 
 
 
@@ -120,14 +124,10 @@ class NN: #Neural Network
         print(self.weightsOutput)
 
     def train(self, patterns, iterations=1):
-        for i in range(iterations):
-            for pair in patterns:
-                #Propagate A
-                self.propagate(pair[0].features)
-                #Propagate B
-                self.propagate(pair[1].features)
-                #Backpropagate
-                self.backpropagate()
+        for pair in patterns:
+            self.propagate(pair[0].features)
+            self.propagate(pair[1].features)
+            self.backpropagate()
         #TODO: Train the network on all patterns for a number of iterations.
         #To measure performance each iteration: Run for 1 iteration, then count misordered pairs.
         #TODO: Training is done  like this (details in exercise text):
@@ -136,33 +136,21 @@ class NN: #Neural Network
         #-Backpropagate
 
     def countMisorderedPairs(self, patterns):
-        numRight = 0
-        numMisses = 0
+        self.numRight = 0
+        self.numMisses = 0
         for pair in patterns:
-            self.propagate(pair[0].features)
-            self.propagate(pair[1].features)
-            if(self.prevOutputActivation > self.outputActivation):
+            A = self.propagate(pair[0].features)
+            B = self.propagate(pair[1].features)
+            if(A > B):
                 winner = pair[0]
                 loser = pair[1]
-            elif(self.prevOutputActivation < self.outputActivation):
+            elif(B > A):
                 winner = pair[1]
                 loser = pair[0]
             if(winner.rating > loser.rating):
-                numRight = numRight + 1
+                self.numRight+=1
             else:
-                numMisses = numMisses + 1
-
-            errorRate = numMisses / (numRight + numMisses)
-            print(errorRate)
-
-        #TODO: Let the network classify all pairs of patterns. The highest output determines the winner.
-        #for each pair, do
-        #Propagate A
-        #Propagate B
-        #if A>B: A wins. If B>A: B wins
-        #if rating(winner) > rating(loser): numRight++
-        #else: numMisses++
-        #end of for
-        #TODO: Calculate the ratio of correct answers:
-        #errorRate = numMisses/(numRight+numMisses)
+                self.numMisses+=1
+        self.errorRate = (self.numMisses / (self.numRight + self.numMisses))
+        print(self.errorRate)
         pass
