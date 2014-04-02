@@ -93,9 +93,9 @@ class NN: #Neural Network
 
 
     def computeHiddenDelta(self):
-        for h in range(0,self.numHidden):
-            self.prevDeltaHidden = logFuncDerivative(self.prevHiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
-            self.deltaHidden = logFuncDerivative(self.hiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
+        for h in range(self.numHidden):
+            self.prevDeltaHidden[h] = logFuncDerivative(self.prevHiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
+            self.deltaHidden[h] = logFuncDerivative(self.hiddenActivations[h])*self.weightsOutput[h]*(self.prevDeltaOutput - self.deltaOutput)
         pass
 
 
@@ -103,7 +103,8 @@ class NN: #Neural Network
         for i in range(0,self.numInputs):
             for j in range(0,self.numHidden):
                 self.weightsInput[i][j] = self.weightsInput[i][j] + self.learningRate*(self.prevDeltaHidden[j] * self.prevHiddenActivations[j] - self.deltaHidden[j] * self.hiddenActivations[j])
-        for x in range(len(self.weightsOutput)):
+
+        for i in range(len(self.weightsOutput)):
             self.weightsOutput[i] += self.learningRate*(self.prevDeltaOutput*self.prevHiddenActivations[i] - self.deltaOutput*self.hiddenActivations[i])
         pass
 
@@ -125,15 +126,12 @@ class NN: #Neural Network
 
     def train(self, patterns, iterations=1):
         for pair in patterns:
+        	#Propagate A
             self.propagate(pair[0].features)
+            #Propagate B
             self.propagate(pair[1].features)
+            #Backpropagate
             self.backpropagate()
-        #TODO: Train the network on all patterns for a number of iterations.
-        #To measure performance each iteration: Run for 1 iteration, then count misordered pairs.
-        #TODO: Training is done  like this (details in exercise text):
-        #-Propagate A
-        #-Propagate B
-        #-Backpropagate
 
     def countMisorderedPairs(self, patterns):
         self.numRight = 0
@@ -151,6 +149,6 @@ class NN: #Neural Network
                 self.numRight+=1
             else:
                 self.numMisses+=1
-        self.errorRate = (self.numMisses / (self.numRight + self.numMisses))
+        self.errorRate = (float(self.numMisses) / float(self.numRight + self.numMisses))
         print(self.errorRate)
         pass
