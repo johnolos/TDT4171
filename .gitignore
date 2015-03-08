@@ -4,3 +4,12 @@
 *.jar
 *.war
 *.ear
+
+.classpath
+.project
+.settings/
+assignment4.zip
+results/
+src/assignment5/sourcefiles.zip
+
+.gitignore
